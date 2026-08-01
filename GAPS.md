@@ -131,8 +131,23 @@ Zhuk's centre theory in ~1670 lines of Lean from a ~24-page blueprint. That is r
 | Cook–Levin → NAE-3-SAT | ~12 | **or 0**, if H1 is left unbuilt as recommended |
 
 Excluding §4 and the complexity wrappers: **~100–130 printed pages ≈ 35 000–60 000 lines
-of Lean**, i.e. a multi-person-year project. No part of it is currently formalized
-anywhere in any proof assistant beyond the centre theorem reused here.
+of Lean**. No part of it is currently formalized anywhere in any proof assistant beyond
+the centre theorem reused here.
+
+Line count, however, is not the binding constraint. This pipeline has demonstrated
+~33 000 verified `sorry`-free Lean lines in ~10 active hours on the Jordan–Schönflies
+formalization, by fanning independent modules out into git worktrees and landing them in
+waves — 52 merges, dozens of `wt/*` branches — with the rate holding on the hard blueprint
+content, not just the foundation. At that throughput the CSP algebra is days of wall clock,
+not years.
+
+What binds instead is the **critical path**: the depth of the serial chain, and the number
+of places where the source is wrong and new mathematics is required. Here that is §3's chain
+— `lem:bridge-from-instance` → `thm:stable-intersection` → `thm:main-inductive`, each a
+single large proof that cannot be split across agents — plus the four blocking defects
+(the §5 citation cycle, the `n = 2` gap, the missing hypothesis in connectedness, and the
+two gaps in the main induction) that need arguments not present in the literature. Those are
+not throughput-limited, and they are what to schedule around.
 
 ## 7. Suggested order
 

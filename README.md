@@ -100,7 +100,20 @@ See [`GAPS.md`](GAPS.md) for the full probe. The short version:
 The predecessor formalized ~3.5 printed pages in ~1670 Lean lines: roughly 480 lines per
 page. Excluding the complexity layer and Zhuk's §4 (XY-symmetric operations, an
 independent result), the remaining source is ~100–130 pages, so **35 000–60 000 lines**.
-This is a multi-person-year project and should be described as one.
+Line count, however, is not the binding constraint. This pipeline has demonstrated
+~33 000 verified `sorry`-free Lean lines in ~10 active hours on the Jordan–Schönflies
+formalization, by fanning independent modules out into git worktrees and landing them in
+waves — 52 merges, dozens of `wt/*` branches — with the rate holding on the hard blueprint
+content, not just the foundation. At that throughput the CSP algebra is days of wall clock,
+not years.
+
+What binds instead is the **critical path**: the depth of the serial chain, and the number
+of places where the source is wrong and new mathematics is required. Here that is §3's chain
+— `lem:bridge-from-instance` → `thm:stable-intersection` → `thm:main-inductive`, each a
+single large proof that cannot be split across agents — plus the four blocking defects
+(the §5 citation cycle, the `n = 2` gap, the missing hypothesis in connectedness, and the
+two gaps in the main induction) that need arguments not present in the literature. Those are
+not throughput-limited, and they are what to schedule around.
 
 ## License
 
