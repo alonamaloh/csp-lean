@@ -11,23 +11,53 @@ nothing there.
 
 ## 0. The one that decides the shape of the project
 
-**There is no complexity theory in Mathlib.** No `P`, no `NP`, no NP-completeness, no
-polynomial-time many-one reduction, no SAT. The single relevant definition,
+**Mathlib has no complexity theory.** No `P`, no `NP`, no NP-completeness, no polynomial-time
+many-one reduction, no SAT. The single relevant definition,
 `Turing.TM2ComputableInPolyTime` (`Mathlib/Computability/TuringMachine/Computable.lean:179`),
-applies to total functions `α → β` rather than to decision problems, and is not even
-known to compose — `TM2ComputableInPolyTime.comp` is an open `proof_wanted` at
-`Computable.lean:284`.
+applies to total functions `α → β` rather than to decision problems, and is not even known to
+compose — `TM2ComputableInPolyTime.comp` is an open `proof_wanted` at `Computable.lean:284`.
 
-So a formalization cannot state "CSP(Γ) is in P, or NP-complete" without first building a
-complexity layer. That layer is a large project *unrelated to the dichotomy*, and it would
-dominate the effort while contributing none of the mathematics.
+**That layer now exists outside Mathlib**, at
+[`../complexity-lean`](../complexity-lean): words, a cost model, `InP`, `InNP` by verifiers,
+`≤ₚ`, `NPHard`, `NPComplete`, and `GenNP` — bounded halting with a certificate — with its
+hardness reduction proved correct. About 850 lines, `sorry`-free, on `propext`,
+`Classical.choice`, `Quot.sound`.
 
-This is why the blueprint states layered targets (`ch0-target.tex`): the algebraic core
-(T0), algorithm correctness as a proposition (T1), the algebraic content of hardness (H0)
-— none of which mention a machine — and the complexity wrappers (T2, H1) isolated and left
-unbuilt. Everything below is about T0/T1/H0.
+An earlier version of this section concluded from Mathlib's gap that the complexity half was
+out of scope because building it would dominate the work. **That was wrong**, and the
+corrected version is what should organise the plan:
 
----
+- Defining the classes is cheap, and always has been: 702 lines in Balbach's Isabelle
+  Cook–Levin development, 992 in Gäher–Kunze's Coq one, against totals of 56,514 and
+  ~16,500.
+- What is expensive is any statement requiring one to **exhibit a program**. "Computable in
+  polynomial time" is not a property one observes of a function; it is an existential over
+  programs, discharged only by writing one and bounding its steps.
+
+That axis cuts across the algebra/complexity split:
+
+| Target | Exhibit a program? | Cost |
+|---|---|---|
+| T0 algebraic core | no | the mathematics |
+| T1 `Solve` is correct | no — but `Solve` must genuinely *compute*; see below | moderate |
+| **T2 `Solve` is polynomial** | **yes, the largest one in the project** | **large** |
+| H0 Γ pp-interprets NAE-3-SAT | no | the mathematics |
+| H1 pp-interpretation ⟹ ≤ₚ | yes, but a syntactic substitution | small |
+
+**Two consequences for this repository.**
+
+*T1 is vacuous unless `Solve` computes.* If `Solve` is built with `Classical.dec` — for
+instance to decide "does `D_x` have a nonempty proper binary absorbing subuniverse?" — then
+`Solve I = true ↔ I has a solution` is a true theorem that says nothing algorithmic, because
+`Solve` does not reduce. This is a live issue in the present code: `CSP/Types.lean` defines
+`SubBA L C B` through `∃ t : L.Term (Fin 2), Witnesses …`, an existential over an infinite
+type. It becomes decidable only through the theorem that a witness of arity `≤ |A|^|A|`
+suffices. That bound is a prerequisite for T1, not a remark about it.
+
+*T2 is non-uniform.* Because Γ is fixed, the searches over subsets, congruences and bounded-arity
+term operations are constant-time — but "constant" means compiled away into a program whose
+*size* depends on `|A|`. So `Solve` is a family `Solve_Γ` with a polynomial `p_Γ` for each Γ,
+and T2 must be stated that way. A bound uniform in Γ would be a different statement, and false.
 
 ## 1. Universal algebra
 

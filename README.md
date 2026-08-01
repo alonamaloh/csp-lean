@@ -43,11 +43,13 @@ See [`GAPS.md`](GAPS.md) for the full probe. The short version:
   congruences of a general structure, clones, polymorphisms, WNU or Taylor terms, or
   anything CSP-related. `Mathlib/Combinatorics/Optimization/ValuedCSP.lean` is *valued*
   CSP with fractional polymorphisms only, and is not a usable base.
-- **Complexity theory**: nothing. No P, no NP, no NP-completeness, no polynomial-time
-  reduction, no SAT. The one relevant definition, `Turing.TM2ComputableInPolyTime`,
-  applies to total functions rather than decision problems and is not known to compose —
-  its composition lemma is an open `proof_wanted` in Mathlib. **This is why the blueprint
-  states layered targets**; see its §1.
+- **Complexity theory**: nothing in Mathlib — no P, no NP, no NP-completeness, no
+  polynomial-time reduction, no SAT; its one time-bounded predicate applies to total
+  functions rather than decision problems and is not known to compose. That layer now
+  exists at [`../complexity-lean`](../complexity-lean) (~850 lines, `sorry`-free). The
+  blueprint still states layered targets, but for a sharper reason than "the layer is
+  missing": what is expensive is exhibiting a *program*, which T2 needs and T0/T1/H0 do
+  not. See `GAPS.md` §0.
 - **Finite combinatorics, graphs, `ZMod`**: essentially everything, with two gaps — a
   `Finite (Setoid α)` instance (~5 lines), and the mixed-prime linear algebra behind the
   codimension-one theorem (medium).
